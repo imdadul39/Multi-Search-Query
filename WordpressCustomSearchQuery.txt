@@ -1,0 +1,179 @@
+<?php
+						$text=$_GET['location'];
+						
+						$minsqft=$_GET['minsqft'];
+						$maxsqft=$_GET['maxsqft'];
+						
+						$price=$_GET['price'];
+						
+						
+				        if($text!="" && $minsqft=="" && $maxsqft=="" && $price=="")
+						{
+						
+						$the_query = new WP_Query( array( 
+						'post_type' => 'property',
+						'paged' => $paged,
+						'meta_query'=>array(
+						     array(
+							  'key'=>'prp_ulocation',
+							  'value'=>$text,
+							  'compare'=>'LIKE'
+						          )	  	   
+						   )));
+						}
+						else if($text=="" && $minsqft!="" && $maxsqft!="" && $price=="")
+						{
+							$the_query = new WP_Query( array( 
+							'post_type' => 'property',
+							'paged' => $paged,
+							'meta_query'=>array(
+							
+								array(
+								  'key'=>'prp_sqft',
+								  'type'=>'NUMERIC',
+								  'value'=>array($minsqft,$maxsqft),
+								  'compare'=>'BETWEEN'
+									  )	  	   
+							   )));
+						}
+						else if($text=="" && $minsqft=="" && $maxsqft=="" && $price!="")
+						{
+							$the_query = new WP_Query( array( 
+								'post_type' => 'property',
+								'paged' => $paged,
+								'meta_query'=>array(
+								
+									array(
+									  'key'=>'prp_uprice',
+									  'type'=>'NUMERIC',
+									  'value'=>$price,
+									  'compare'=>'<='
+										  )	  	  	   
+								   )));	
+						}
+						else if($text!="" && $minsqft=="" && $maxsqft=="" && $price!="")
+						{
+							$the_query = new WP_Query( array( 
+								'post_type' => 'property',
+								'paged' => $paged,
+								'meta_query'=>array(
+								
+									array(
+									  'key'=>'prp_uprice',
+									  'type'=>'NUMERIC',
+									  'value'=>$price,
+									  'compare'=>'<='
+										  ),
+									array(
+									  'key'=>'prp_ulocation',
+									  'value'=>$text,
+									  'compare'=>'LIKE'
+										  )		  
+										  	  	   
+								   )));	
+						}
+						else if($text=="" && $minsqft!="" && $maxsqft!="" && $price!="")
+						{
+							$the_query = new WP_Query( array( 
+								'post_type' => 'property',
+								'paged' => $paged,
+								'meta_query'=>array(
+								
+									array(
+									  'key'=>'prp_uprice',
+									  'type'=>'NUMERIC',
+									  'value'=>$price,
+									  'compare'=>'<='
+										  ),
+									array(
+									  'key'=>'prp_sqft',
+									  'type'=>'NUMERIC',
+									  'value'=>array($minsqft,$maxsqft),
+									  'compare'=>'BETWEEN'
+										  )		  
+										  	  	   
+								   )));	
+						}
+						else if($text!="" && $minsqft!="" && $maxsqft!="" && $price=="")
+						{
+							$the_query = new WP_Query( array( 
+								'post_type' => 'property',
+								'paged' => $paged,
+								'meta_query'=>array(
+								
+									array(
+										  'key'=>'prp_ulocation',
+										  'value'=>$text,
+										  'compare'=>'LIKE'
+										  ),
+									array(
+									  'key'=>'prp_sqft',
+									  'type'=>'NUMERIC',
+									  'value'=>array($minsqft,$maxsqft),
+									  'compare'=>'BETWEEN'
+										  )		  
+										  	  	   
+								   )));	
+						}
+						else
+						{
+							$the_query = new WP_Query( array( 
+							'post_type' => 'property',
+							'paged' => $paged,
+							'meta_query'=>array(
+								 array(
+								  'key'=>'prp_ulocation',
+								  'value'=>$text,
+								  'compare'=>'LIKE'
+									  ),
+								 array(
+								  'key'=>'prp_sqft',
+								  'type'=>'NUMERIC',
+								  'value'=>array($minsqft,$maxsqft),
+								  'compare'=>'BETWEEN'
+									  ),
+								 array(
+									  'key'=>'prp_uprice',
+									  'type'=>'NUMERIC',
+									  'value'=>$price,
+									  'compare'=>'<='
+									  )	  	 	  	
+							   )));
+						}
+						
+					    while ( $the_query->have_posts() ) : $the_query->the_post();
+						?> 
+                            <div class="col-md-4 col-sm-6 col-xs-12">
+                                <div class="flat-item">
+                                    <div class="flat-item-image">
+                                        <span class="for-sale">For Sale</span>
+                                        <a href="<?php the_permalink();?>"><img src="<?php echo get_the_post_thumbnail_url(); ?>" alt=""></a>
+                                        <div class="flat-link">
+                                            <a href="<?php the_permalink();?>">More Details</a>
+                                        </div>
+                                        <ul class="flat-desc">
+                                            <li>
+                                                <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/images/icons/4.png" alt="">
+                                                <span><?php echo get_field( 'prp_sqft'); ?> sqft</span>
+                                            </li>
+                                            <li>
+                                                <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/images/icons/5.png" alt="">
+                                                <span>5</span>
+                                            </li>
+                                            <li>
+                                                <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/images/icons/6.png" alt="">
+                                                <span>3</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="flat-item-info">
+                                        <div class="flat-title-price">
+                                            <h5><a href="<?php the_permalink();?>"><?php echo get_the_title(); ?></a></h5>
+                                            <span class="price">&#8377 <?php echo get_field( 'prp_uprice'); ?> / SQFT</span>
+                                        </div>
+                                        <p><img src="<?php echo esc_url( get_template_directory_uri() ); ?>/images/icons/location.png" alt=""><?php echo get_field( 'prp_ulocation'); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- flat-item -->
+                           <?php endwhile; ?>
